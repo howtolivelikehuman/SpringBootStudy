@@ -10,6 +10,7 @@ import hello.core.member.MemoryMemberRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+//팩토리 메소드를 통한 방법
 @Configuration
 public class AppConfig {
 
