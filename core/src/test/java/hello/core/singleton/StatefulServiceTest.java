@@ -29,8 +29,9 @@ class StatefulServiceTest {
         
         //A가 주문금액 조회
         int price = statefulService1.getPrice();
+
         //근데 20000됨
-        assertThat(statefulService1.getPrice()).isEqualTo(20000);
+        assertThat(statefulService1.getPrice()).isNotEqualTo(20000);
     }
 
 }
