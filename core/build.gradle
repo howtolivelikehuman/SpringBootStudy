@@ -12,9 +12,24 @@ repositories {
 	mavenCentral()
 }
 
+//롬복 추가
+configurations{
+	complieOnly{
+		extendsFrom annotationProcessor
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'junit:junit:4.12'
+
+	//롬복
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
 	implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
