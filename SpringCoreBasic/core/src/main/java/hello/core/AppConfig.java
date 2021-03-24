@@ -29,7 +29,7 @@ public class AppConfig {
         return new MemoryMemberRepository();
     }
     @Bean
-    public DiscountPolicy DiscountPolicy() {
+    public DiscountPolicy discountPolicy() {
         System.out.println("call AppConfig.DiscountPolicy");
         //return new FixDiscountPolicy();
         return new RateDiscountPolicy();
