@@ -5,6 +5,9 @@ spring:
     password:
     driver-class-name: org.h2.Driver
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
 
   jpa:
     hibernate:
