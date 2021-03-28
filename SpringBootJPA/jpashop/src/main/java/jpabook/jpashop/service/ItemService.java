@@ -17,14 +17,13 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     @Transactional
-    public Long saveItem(Item item){
+    public Long saveItem(Item item) {
         itemRepository.save(item);
         return item.getId();
     }
-
     //변경감지
     @Transactional
-    public Item updateItem(Long itemId, updateItemDto itemDto){
+    public Item updateItem(Long itemId, updateItemDto itemDto) {
         //findItem = 영속성 상태
         Item findItem = itemRepository.findOne(itemId);
         findItem.setPrice(itemDto.getPrice());
@@ -33,11 +32,11 @@ public class ItemService {
         return findItem;
     }
 
-    public List<Item> findItems(){
+    public List<Item> findItems() {
         return itemRepository.findAll();
     }
 
-    public Item findOne(Long itemId){
+    public Item findOne(Long itemId) {
         return itemRepository.findOne(itemId);
     }
 }

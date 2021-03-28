@@ -24,4 +24,13 @@ public class ItemUpdateTest {
 
         //then
     }
+
+    @Test
+    public void 테스트() throws Exception{
+        //given
+           
+        //when
+           
+        //then
+    }
 }
