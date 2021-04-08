@@ -26,7 +26,7 @@ public class JpaMain {
 
             //조회
             Member find = em.find(Member.class, 11L);
-            System.out.println("findMem = " + find.getId() + " " + find.getName());
+            System.out.println("findMem = " + find.getId() + " " + find.getUsername());
 
             //비영속
             Member member2 = new Member(12l,"박정무");
@@ -52,7 +52,7 @@ public class JpaMain {
             //찾고
             Member findMem = em.find(Member.class, 11L);
             //그냥 바꾸기
-            findMem.setName("임꺽정");
+            findMem.setUsername("임꺽정");
             em.flush();
             System.out.println("==================");
             //persist 없어도 됨
