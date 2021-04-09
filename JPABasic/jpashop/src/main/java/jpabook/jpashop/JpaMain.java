@@ -1,4 +1,8 @@
-package hello.jpa;
+package jpabook.jpashop;
+
+import jpabook.jpashop.domain.Member;
+import jpabook.jpashop.domain.Order;
+import jpabook.jpashop.domain.OrderItem;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -13,31 +17,24 @@ public class JpaMain {
 
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        tx.begin();
 
+        tx.begin();
         try {
 
-            Team team = new Team();
-            team.setName("tA");
-            em.persist(team);
+            Order order = new Order();
+            em.persist(order);
 
-            Member member = new Member();
-            em.persist(member);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(order);
+            em.persist(orderItem);
 
-            //양쪽 매핑
-            team.addMember(member);
-
-
-            //영속성 컨텍스트 다 DB로
-            em.flush();
-            //컨텍스트 비우기
-            em.clear();
 
             tx.commit();
         } catch (Exception e) {
-            e.printStackTrace();
             tx.rollback();
+            e.printStackTrace();
         } finally {
+            //WEB의 경우 WAS가 내려갈때 엔티티매니저도 내려줘야함.
             em.close();
         }
         //close

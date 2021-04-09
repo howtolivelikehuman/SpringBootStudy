@@ -1,21 +1,27 @@
 package hello.jpa;
-
-import org.h2.engine.User;
-
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 public class Member {
-    @Id
+    @Id @GeneratedValue
+    @Column(name = "MEMBER_ID")
     private Long id;
+    @Column(name = "USERNAME")
+    private String name;
+//    @Column(name = "TEAM_ID")
+//    private Long teamId;
 
-    public Member() {
+    @ManyToOne
+    @JoinColumn(name = "TEAM_ID")
+    private Team team;
+
+    public Team getTeam() {
+        return team;
     }
 
-    public Member(Long id, String name) {
-        this.id = id;
-        this.username = name;
+    public void setTeam(Team team) {
+        this.team = team;
     }
 
     @Column(name = "name")
