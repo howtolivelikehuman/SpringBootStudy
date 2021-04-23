@@ -16,24 +16,17 @@ public class JpaMain {
         tx.begin();
 
         try {
-
-            Team team = new Team();
-            team.setName("tA");
-            em.persist(team);
-
             Member member = new Member();
+            member.setName("Member1");
+
             em.persist(member);
 
-            //양쪽 매핑
-            team.addMember(member);
+            Team team = new Team();
+            team.setName("Member1");
+            team.getMembers().add(member);
 
+            em.persist(member);
 
-            //영속성 컨텍스트 다 DB로
-            em.flush();
-            //컨텍스트 비우기
-            em.clear();
-
-            tx.commit();
         } catch (Exception e) {
             e.printStackTrace();
             tx.rollback();

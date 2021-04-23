@@ -1,66 +1,41 @@
 package hello.jpa;
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Member {
     @Id @GeneratedValue
     @Column(name = "MEMBER_ID")
     private Long id;
-    @Column(name = "USERNAME")
+
+    @Column(name ="USERNAME")
     private String name;
 //    @Column(name = "TEAM_ID")
 //    private Long teamId;
-
     @ManyToOne
-    @JoinColumn(name = "TEAM_ID")
+    @JoinColumn(name = "Team_ID",insertable = false,  updatable = false)
     private Team team;
 
-    public Team getTeam() {
-        return team;
-    }
-
-    public void setTeam(Team team) {
-        this.team = team;
-    }
-
-    @Column(name = "name")
-    private String username;
-
-    private Integer age;
-
-    @Enumerated(EnumType.STRING)
-    private RoleType roleType;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date lastModifiedDate;
-
-    @Lob
-    private String description;
-
-
-    @Transient
-    private int notDB;
-
-    //Getter, Setter…
-    public Long getId() {
-        return id;
-    }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public void setRoleType(RoleType A){
-        this.roleType = A;
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getUsername() {
-        return username;
+
+    public Long getId() {
+        return id;
     }
-    public void setUsername(String username){
-        this.username = username;
+
+    public String getName() {
+        return name;
     }
+
+    @OneToMany
+    @JoinColumn(name = "TEAM_ID")
+    private List<Member> members = new ArrayList<>();
 }
 
