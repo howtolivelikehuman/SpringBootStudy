@@ -18,6 +18,11 @@ public class Member {
     @JoinColumn(name = "Team_ID",insertable = false,  updatable = false)
     private Team team;
 
+
+    @OneToOne
+    @JoinColumn(name = "LOCKER_ID")
+    private Locker locker;
+
     public void setId(Long id) {
         this.id = id;
     }
