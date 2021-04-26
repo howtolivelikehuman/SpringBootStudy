@@ -1,5 +1,6 @@
 package jpabook.jpashop;
 
+import jpabook.jpashop.domain.Book;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderItem;
@@ -20,21 +21,19 @@ public class JpaMain {
 
         tx.begin();
         try {
+            Book book =  new Book();
+            book.setName("jpa");
+            book.setAuthor("김영한");
 
-            Order order = new Order();
-            em.persist(order);
-
-            OrderItem orderItem = new OrderItem();
-            orderItem.setOrder(order);
-            em.persist(orderItem);
-
-
+            em.persist(book);
             tx.commit();
+
         } catch (Exception e) {
             tx.rollback();
             e.printStackTrace();
         } finally {
             //WEB의 경우 WAS가 내려갈때 엔티티매니저도 내려줘야함.
+
             em.close();
         }
         //close
