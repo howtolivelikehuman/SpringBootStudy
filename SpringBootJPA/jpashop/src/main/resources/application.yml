@@ -12,7 +12,7 @@ spring:
   jpa:
     hibernate:
       #자동으로 테이블 만들어줌 : create
-      ddl-auto: create
+      ddl-auto: update
 
     properties:
       hibernate:
