@@ -5,6 +5,7 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderSimpleApiController {
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     @GetMapping("/api/vi/simple-orders")
     public List<Order> ordersV1(){
@@ -47,6 +49,22 @@ public class OrderSimpleApiController {
 
     }
 
+    @GetMapping("api/v3/simple-orders")
+    public Result ordersV3(){
+
+        List<Order> all = orderRepository.findAllWithMemberDelivery();
+        List<SimpleOrderDto> result = all.stream().map(SimpleOrderDto::new)
+                .collect(Collectors.toList());
+        return new Result(result);
+    }
+
+    @GetMapping("api/v4/simple-orders")
+    public Result ordersV4(){
+        return  new Result(orderSimpleQueryRepository.findOrderDtos());
+    }
+
+
+
     @Data
     static class SimpleOrderDto{
         private Long orderId;
@@ -57,10 +75,10 @@ public class OrderSimpleApiController {
 
         public SimpleOrderDto(Order order){
             orderId = order.getId();
-            name = order.getMember().getName();
+            name = order.getMember().getName(); //LAZY 초기화
             orderDate = order.getOrderDate();
             orderStatus = order.getStatus();
-            address = order.getDelivery().getAddress();
+            address = order.getDelivery().getAddress(); //LAZY 초기화
         }
     }
 
