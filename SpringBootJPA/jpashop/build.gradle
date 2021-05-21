@@ -24,6 +24,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
+	//Hibernate5
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
+
 	//자동으로 리로딩
 	implementation 'org.springframework.boot:spring-boot-devtools'
 
