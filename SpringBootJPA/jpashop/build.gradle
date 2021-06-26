@@ -1,3 +1,11 @@
+
+//querydsl 추가
+buildscript {
+	dependencies {
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:1.0.10")
+	}
+}
+
 plugins {
 	id 'org.springframework.boot' version '2.4.4'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -7,6 +15,9 @@ plugins {
 group = 'jpabook'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+//apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+
 
 configurations {
 	compileOnly {
@@ -26,7 +37,7 @@ dependencies {
 
 	//Hibernate5
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
-
+	// implementation 'org.hibernate:hibernate-core:5.4.13.Final'
 	//자동으로 리로딩
 	implementation 'org.springframework.boot:spring-boot-devtools'
 
@@ -35,6 +46,12 @@ dependencies {
 
 	//validation
 	implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+
+	//querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa'
+	//querydsl 추가
+	implementation 'com.querydsl:querydsl-apt'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
@@ -48,4 +65,27 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+//querydsl 추가
+//def querydslDir = 'src/main/generated'
+def querydslDir = "$buildDir/generated/querydsl"
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslDir]
+		}
+	}
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	querydsl.extendsFrom compileClasspath
 }
