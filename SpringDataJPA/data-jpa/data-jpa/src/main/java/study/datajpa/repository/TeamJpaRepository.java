@@ -35,4 +35,6 @@ public class TeamJpaRepository {
     public long count(){
         return em.createQuery("select count(t) from Team t", Long.class).getSingleResult();
     }
+
+
 }
