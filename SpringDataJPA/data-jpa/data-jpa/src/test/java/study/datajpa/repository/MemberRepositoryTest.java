@@ -3,6 +3,9 @@ package study.datajpa.repository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.datajpa.dto.MemberDto;
@@ -11,6 +14,7 @@ import study.datajpa.entity.Team;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -156,6 +160,54 @@ public class MemberRepositoryTest {
         for (Member s: result) {
             System.out.println("s = " + s);
         }
+    }
+
+    @Test
+    public void returnType(){
+        Member m1 = new Member("AAA",10);
+        Member m2 = new Member("BBB",20);
+
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<Member> aaa = memberRepository.findListByUsername("AAA");
+        Member bbb = memberRepository.findMemberByUsername("AAA");
+        Optional<Member> ccc = memberRepository.findOptionalByUsername("BBB");
+
+
+    }
+
+    @Test
+    public void paging(){
+
+        //given
+        memberRepository.save(new Member("mem1", 10));
+        memberRepository.save(new Member("mem2", 10));
+        memberRepository.save(new Member("mem3", 10));
+        memberRepository.save(new Member("mem4", 10));
+        memberRepository.save(new Member("mem5", 10));
+
+        int age = 10;
+        int page = 3;
+        int size = 3;
+
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "username"));
+
+        //when
+        Page<Member> pages = memberRepository.findByAge(age, pageRequest);
+        //이걸로 반환해서 뱉기
+        Page<MemberDto> pageMap = pages.map(member -> new MemberDto(member.getId(), member.getUsername(), null));
+
+
+        //then
+        List<Member> content = pages.getContent();
+
+        assertThat(content.size()).isEqualTo(3);
+        assertThat(pages.getTotalElements()).isEqualTo(5);
+        assertThat(pages.getTotalPages()).isEqualTo(3);
+        assertThat(pages.getNumber()).isEqualTo(0);
+        assertThat(pages.isFirst()).isTrue();
+        assertThat(pages.hasNext()).isTrue();
     }
 
 }
