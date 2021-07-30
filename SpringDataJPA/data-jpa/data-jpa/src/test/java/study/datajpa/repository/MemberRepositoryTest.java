@@ -12,6 +12,8 @@ import study.datajpa.dto.MemberDto;
 import study.datajpa.entity.Member;
 import study.datajpa.entity.Team;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class MemberRepositoryTest {
 
     @Autowired MemberRepository memberRepository;
     @Autowired TeamRepository teamRepository;
+    @PersistenceContext EntityManager em;
 
     @Test
     public void testMember(){
@@ -210,4 +213,53 @@ public class MemberRepositoryTest {
         assertThat(pages.hasNext()).isTrue();
     }
 
+    @Test
+    public void bulkUpdate(){
+        memberRepository.save(new Member("mem1", 10));
+        memberRepository.save(new Member("mem2", 19));
+        memberRepository.save(new Member("mem3", 20));
+        memberRepository.save(new Member("mem4", 21));
+        memberRepository.save(new Member("mem5", 40));
+
+        int resultCount = memberRepository.bulkAgePlus(20);
+        em.flush();
+        em.clear();
+
+        List<Member> result = memberRepository.findByUsername("mem5");
+        Member member5 = result.get(0);
+
+        assertThat(resultCount).isEqualTo(3);
+    }
+
+    @Test
+    public void findMemberLazy(){
+        //given
+        Team teamA = new Team("teamA");
+        Team teamB = new Team("teamB");
+        teamRepository.save(teamA);
+        teamRepository.save(teamB);
+        Member mem1 = new Member("mem1", 10, teamA);
+        Member mem2 = new Member("mem2", 20, teamB);
+        memberRepository.save(mem1);
+        memberRepository.save(mem2);
+
+        em.flush();
+        em.clear();
+        //DB에 완전히 반영되고, 영속성 컨텍스트가 완전히 날아감.
+
+
+        /*member랑 team은 N:1 관계 (Lazy)
+        Member 조회시 team은 조회 안함 (사용하는 시점에 조회) = 지연 로딩
+         */
+
+        //when
+        List<Member> members = memberRepository.findAll();
+        for (Member a : members){
+            System.out.println("memberName = " + a.getUsername());
+            System.out.println("memberTeam = " + a.getTeam().getName());
+            System.out.println("memberTeam = " + a.getTeam().getClass());
+        }
+
+        //then
+    }
 }
